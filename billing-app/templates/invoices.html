@@ -1,0 +1,39 @@
+{{ define "title" }}Invoices{{ end }} {{ define "content" }}
+<div class="p-4">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-2xl font-bold">{{ t "invoices.title" }}</h1>
+    <a href="/invoices" class="btn btn-outline btn-sm"
+      >{{ t "invoices.refresh" }}</a
+    >
+  </div>
+  {{ if .NoCompany }}
+  <div class="alert alert-warning">{{ t "invoices.no_company" }}</div>
+  {{ end }}
+  <div class="overflow-x-auto rounded-box border border-base-300">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Status</th>
+          <th>Items</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ range .Invoices }}
+        <tr>
+          <td>#{{ .ID }}</td>
+          <td>{{ .Status }}</td>
+          <td>{{ len .Items }}</td>
+        </tr>
+        {{ else }}
+        <tr>
+          <td colspan="3" class="text-center text-base-content/60">
+            {{ t "invoices.empty" }}
+          </td>
+        </tr>
+        {{ end }}
+      </tbody>
+    </table>
+  </div>
+</div>
+{{ end }}

@@ -1,0 +1,11 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='320' height='180' viewBox='0 0 320 180' fill='none'>
+  <rect width='320' height='180' rx='12' fill='#0F172A'/>
+  <rect x='32' y='24' width='120' height='132' rx='8' fill='#1E293B' stroke='#334155' stroke-width='2'/>
+  <rect x='44' y='44' width='72' height='8' rx='4' fill='#6366F1'/>
+  <rect x='44' y='60' width='52' height='8' rx='4' fill='#475569'/>
+  <rect x='44' y='76' width='64' height='8' rx='4' fill='#475569'/>
+  <rect x='44' y='92' width='40' height='8' rx='4' fill='#6366F1'/>
+  <rect x='44' y='118' width='24' height='24' rx='6' fill='#6366F1'/>
+  <rect x='176' y='24' width='112' height='60' rx='10' fill='#6366F1' opacity='0.15'/>
+  <path d='M188 44h64M188 60h40' stroke='#6366F1' stroke-width='4' stroke-linecap='round' opacity='0.5'/>
+</svg>

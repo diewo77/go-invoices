@@ -1,0 +1,402 @@
+{{ define "title" }}Configuration - Billing App{{ end }} {{ define "content" }}
+<div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10">
+  <div class="mb-8 flex items-center justify-between flex-wrap gap-4">
+    <h1 class="text-3xl font-semibold tracking-tight">
+      Configuration initiale
+    </h1>
+    <a href="/dashboard" class="btn btn-outline btn-xs normal-case"
+      >← Dashboard</a
+    >
+  </div>
+  <p class="text-sm text-slate-600 dark:text-slate-300 mb-8">
+    Renseignez les informations de votre entreprise pour commencer.
+  </p>
+  <div class="card bg-base-100 shadow-sm border border-base-200 p-8">
+    <form
+      class="space-y-8"
+      method="post"
+      action="/setup"
+      accept-charset="utf-8"
+    >
+      <h1 class="text-3xl font-semibold mb-6 text-center">
+        Configuration initiale
+      </h1>
+      <p class="text-gray-600 text-sm mb-8 text-center">
+        Renseignez les informations de votre entreprise pour commencer.
+      </p>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="md:col-span-2">
+          <label class="block mb-1 font-medium" for="company"
+            >Nom de l'entreprise *</label
+          >
+          <input class="w-full border rounded px-3 py-2" type="text"
+          id="company" name="company" value="{{with .Values}}{{index .
+          "company"}}{{end}}" required /> {{with .FieldErrors.company}}
+          <p class="text-red-600 text-xs mt-1">{{.}}</p>
+          {{end}}
+        </div>
+        <div class="md:col-span-2">
+          <label class="block mb-1 font-medium" for="address">Adresse *</label>
+          <input class="w-full border rounded px-3 py-2" type="text"
+          id="address" name="address" value="{{with .Values}}{{index .
+          "address"}}{{end}}" required /> {{with .FieldErrors.address}}
+          <p class="text-red-600 text-xs mt-1">{{.}}</p>
+          {{end}}
+        </div>
+        <div class="md:col-span-2">
+          <label class="block mb-1 font-medium" for="address2"
+            >Complément</label
+          >
+          <input class="w-full border rounded px-3 py-2" type="text"
+          id="address2" name="address2" value="{{with .Values}}{{index .
+          "address2"}}{{end}}" />
+        </div>
+        <div>
+          <label class="block mb-1 font-medium" for="postal_code"
+            >Code postal *</label
+          >
+          <input class="w-full border rounded px-3 py-2" type="text"
+          id="postal_code" name="postal_code" value="{{with .Values}}{{index .
+          "postal_code"}}{{end}}" required /> {{with .FieldErrors.postal_code}}
+          <p class="text-red-600 text-xs mt-1">{{.}}</p>
+          {{end}}
+        </div>
+        <div>
+          <label class="block mb-1 font-medium" for="city">Ville *</label>
+          <input class="w-full border rounded px-3 py-2" type="text" id="city"
+          name="city" value="{{with .Values}}{{index . "city"}}{{end}}" required
+          /> {{with .FieldErrors.city}}
+          <p class="text-red-600 text-xs mt-1">{{.}}</p>
+          {{end}}
+        </div>
+        <div>
+          <label class="block mb-1 font-medium" for="country">Pays *</label>
+          <input class="w-full border rounded px-3 py-2" type="text"
+          id="country" name="country" value="{{with .Values}}{{if index .
+          "country"}}{{index . "country"}}{{else}}FR{{end}}{{else}}FR{{end}}"
+          required /> {{with .FieldErrors.country}}
+          <p class="text-red-600 text-xs mt-1">{{.}}</p>
+          {{end}}
+        </div>
+        <div>
+          <label class="block mb-1 font-medium" for="siret">SIRET *</label>
+          <input class="w-full border rounded px-3 py-2" type="text" id="siret"
+          name="siret" maxlength="14" minlength="14" pattern="[0-9]{14}"
+          value="{{with .Values}}{{index . "siret"}}{{end}}" required /> {{with
+          .FieldErrors.siret}}
+          <p class="text-red-600 text-xs mt-1">{{.}}</p>
+          {{end}}
+          <p class="text-xs text-gray-500 mt-1">14 chiffres sans espaces.</p>
+        </div>
+        <div class="md:col-span-2 pt-4 border-t">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-lg font-semibold">Adresse de facturation</h2>
+            <label class="inline-flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                id="same-billing"
+                class="h-4 w-4"
+                {{if
+                .BillingSeparate}}{{else}}checked{{end}}
+              />
+              Utiliser l'adresse principale
+            </label>
+          </div>
+          <p class="text-xs text-gray-500 mb-4">
+            Décochez pour saisir une adresse de facturation différente.
+          </p>
+          <div
+            id="billing-fields"
+            class="grid md:grid-cols-2 gap-6 opacity-40 pointer-events-none select-none"
+          >
+            <div class="md:col-span-2">
+              <label class="block mb-1 font-medium" for="billing_address1"
+                >Adresse facturation 1 *</label
+              >
+              <input class="w-full border rounded px-3 py-2" type="text"
+              id="billing_address1" name="billing_address1" value="{{with
+              .Values}}{{index . "billing_address1"}}{{end}}" /> {{with
+              .FieldErrors.billing_address1}}
+              <p class="text-red-600 text-xs mt-1">{{.}}</p>
+              {{end}}
+            </div>
+            <div class="md:col-span-2">
+              <label class="block mb-1 font-medium" for="billing_address2"
+                >Complément</label
+              >
+              <input class="w-full border rounded px-3 py-2" type="text"
+              id="billing_address2" name="billing_address2" value="{{with
+              .Values}}{{index . "billing_address2"}}{{end}}" />
+            </div>
+            <div>
+              <label class="block mb-1 font-medium" for="billing_postal_code"
+                >Code postal *</label
+              >
+              <input class="w-full border rounded px-3 py-2" type="text"
+              id="billing_postal_code" name="billing_postal_code" value="{{with
+              .Values}}{{index . "billing_postal_code"}}{{end}}" /> {{with
+              .FieldErrors.billing_postal_code}}
+              <p class="text-red-600 text-xs mt-1">{{.}}</p>
+              {{end}}
+            </div>
+            <div>
+              <label class="block mb-1 font-medium" for="billing_city"
+                >Ville *</label
+              >
+              <input class="w-full border rounded px-3 py-2" type="text"
+              id="billing_city" name="billing_city" value="{{with
+              .Values}}{{index . "billing_city"}}{{end}}" /> {{with
+              .FieldErrors.billing_city}}
+              <p class="text-red-600 text-xs mt-1">{{.}}</p>
+              {{end}}
+            </div>
+            <div>
+              <label class="block mb-1 font-medium" for="billing_country"
+                >Pays *</label
+              >
+              <input class="w-full border rounded px-3 py-2" type="text"
+              id="billing_country" name="billing_country" value="{{with
+              .Values}}{{if index . "billing_country"}}{{index .
+              "billing_country"}}{{else}}FR{{end}}{{else}}FR{{end}}" /> {{with
+              .FieldErrors.billing_country}}
+              <p class="text-red-600 text-xs mt-1">{{.}}</p>
+              {{end}}
+            </div>
+          </div>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block mb-1 font-medium">Assujetti à la TVA ? *</label>
+          <div class="flex items-center gap-6 mt-1">
+            <label class="inline-flex items-center gap-2 text-sm">
+              <input
+                type="radio"
+                class="border-gray-300"
+                name="tva"
+                value="oui"
+                required
+                {{if
+                .VATEnabled}}checked{{end}}
+              />
+              Oui
+            </label>
+            <label class="inline-flex items-center gap-2 text-sm">
+              <input
+                type="radio"
+                class="border-gray-300"
+                name="tva"
+                value="non"
+                required
+                {{if
+                .VATEnabled}}{{else}}checked{{end}}
+              />
+              Non
+            </label>
+          </div>
+        </div>
+        <div>
+          <label class="block mb-1 font-medium" for="tva-rate"
+            >Taux de TVA (%)</label
+          >
+          <input class="w-full border rounded px-3 py-2" type="number"
+          id="tva-rate" name="tva_rate" min="0" max="100" step="0.01"
+          value="{{with .Values}}{{index . "tva_rate"}}{{end}}" {{if
+          .VATEnabled}}{{else}}disabled{{end}} /> {{with .FieldErrors.tva_rate}}
+          <p class="text-red-600 text-xs mt-1">{{.}}</p>
+          {{end}}
+        </div>
+      </div>
+      <input
+        type="hidden"
+        name="billing_separate"
+        id="billing_separate"
+        value="0"
+      />
+      <input type="hidden" name="confirm" id="confirm_flag" value="0" />
+      <div class="pt-4 flex justify-end gap-4">
+        <button
+          type="submit"
+          id="submit_btn"
+          class="btn btn-primary normal-case"
+        >
+          Continuer
+        </button>
+      </div>
+    </form>
+  </div>
+  <!-- Summary Modal -->
+  <div
+    id="summary_modal"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+  >
+    <div
+      class="bg-white dark:bg-slate-800 w-full max-w-xl rounded shadow-lg p-6 space-y-4 border border-slate-200 dark:border-slate-700"
+    >
+      <h3 class="text-xl font-semibold">Vérification</h3>
+      <div
+        id="summary_content"
+        class="text-sm space-y-2 max-h-80 overflow-auto"
+      ></div>
+      <div class="flex justify-end gap-3 pt-2">
+        <button
+          id="edit_btn"
+          class="px-4 py-2 rounded border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-sm"
+        >
+          Modifier
+        </button>
+        <button
+          id="confirm_btn"
+          class="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700 text-sm"
+        >
+          Confirmer
+        </button>
+      </div>
+    </div>
+  </div>
+  <footer class="text-center text-xs opacity-60 mt-10">
+    &copy; {{ .Year }} Billing App
+  </footer>
+</div>
+<script>
+  (function () {
+    const cb = document.getElementById("same-billing");
+    const block = document.getElementById("billing-fields");
+    const separateFlag = document.getElementById("billing_separate");
+    const vatRadios = document.querySelectorAll('input[name="tva"]');
+    const vatRate = document.getElementById("tva-rate");
+    const billingRequired = [
+      "billing_address1",
+      "billing_postal_code",
+      "billing_city",
+      "billing_country",
+    ];
+    const map = [
+      ["address", "billing_address1"],
+      ["address2", "billing_address2"],
+      ["postal_code", "billing_postal_code"],
+      ["city", "billing_city"],
+      ["country", "billing_country"],
+    ];
+
+    function sync(copyValues) {
+      map.forEach(([src, dst]) => {
+        const s = document.getElementById(src);
+        const d = document.getElementById(dst);
+        if (!s || !d) return;
+        d.disabled = cb.checked;
+        if (cb.checked) {
+          block.classList.add(
+            "opacity-40",
+            "pointer-events-none",
+            "select-none"
+          );
+          if (copyValues) d.value = s.value;
+          d.removeAttribute("required");
+        } else {
+          block.classList.remove(
+            "opacity-40",
+            "pointer-events-none",
+            "select-none"
+          );
+          if (billingRequired.includes(dst))
+            d.setAttribute("required", "required");
+        }
+      });
+      separateFlag.value = cb.checked ? "0" : "1";
+    }
+
+    cb.addEventListener("change", () => sync(true));
+    sync(true);
+    map.forEach(([src, dst]) => {
+      const s = document.getElementById(src);
+      s &&
+        s.addEventListener("input", () => {
+          if (cb.checked) {
+            const d = document.getElementById(dst);
+            if (d) d.value = s.value;
+          }
+        });
+    });
+    vatRadios.forEach((r) =>
+      r.addEventListener("change", () => {
+        if (r.value === "oui" && r.checked) {
+          vatRate.disabled = false;
+          vatRate.required = true;
+        } else if (r.value === "non" && r.checked) {
+          vatRate.disabled = true;
+          vatRate.required = false;
+          vatRate.value = "";
+        }
+      })
+    );
+
+    // Summary confirm step
+    const form = document.querySelector('form[action="/setup"]');
+    const confirmFlag = document.getElementById("confirm_flag");
+    const summaryModal = document.getElementById("summary_modal");
+    const summaryContent = document.getElementById("summary_content");
+    const submitBtn = document.getElementById("submit_btn");
+    const editBtn = document.getElementById("edit_btn");
+    const confirmBtn = document.getElementById("confirm_btn");
+
+    function add(entries, label, id) {
+      const el = document.getElementById(id);
+      if (el && el.value)
+        entries.push(
+          `<div><span class='font-medium'>${label}:</span> ${el.value}</div>`
+        );
+    }
+
+    function buildSummary() {
+      const entries = [];
+      add(entries, "Entreprise", "company");
+      add(entries, "Adresse", "address");
+      add(entries, "Complément", "address2");
+      add(entries, "Code postal", "postal_code");
+      add(entries, "Ville", "city");
+      add(entries, "Pays", "country");
+      add(entries, "SIRET", "siret");
+      const vatEnabled = [...vatRadios].some(
+        (r) => r.checked && r.value === "oui"
+      );
+      entries.push(
+        `<div><span class='font-medium'>TVA:</span> ${
+          vatEnabled ? "Oui (" + (vatRate.value || "-") + "%)" : "Non"
+        }</div>`
+      );
+      if (separateFlag.value === "1") {
+        add(entries, "Adresse facturation", "billing_address1");
+        add(entries, "Complément facturation", "billing_address2");
+        add(entries, "CP facturation", "billing_postal_code");
+        add(entries, "Ville facturation", "billing_city");
+        add(entries, "Pays facturation", "billing_country");
+      } else {
+        entries.push(
+          '<div><span class="font-medium">Adresse facturation:</span> identique</div>'
+        );
+      }
+      summaryContent.innerHTML = entries.join("");
+    }
+
+    form.addEventListener("submit", function (e) {
+      if (confirmFlag.value !== "1") {
+        e.preventDefault();
+        if (!form.reportValidity()) return;
+        buildSummary();
+        summaryModal.classList.remove("hidden");
+        submitBtn.disabled = true;
+      }
+    });
+    editBtn.addEventListener("click", () => {
+      summaryModal.classList.add("hidden");
+      submitBtn.disabled = false;
+    });
+    confirmBtn.addEventListener("click", () => {
+      confirmFlag.value = "1";
+      summaryModal.classList.add("hidden");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Envoi...";
+      form.submit();
+    });
+  })();
+</script>
+{{ end }}
