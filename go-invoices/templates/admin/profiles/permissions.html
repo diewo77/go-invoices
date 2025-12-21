@@ -1,0 +1,150 @@
+{{ define "title" }}{{ t "admin_profiles_permissions" }} - {{ .Profile.Name }} -
+Billing App{{ end }} {{ define "content" }}
+<div class="max-w-4xl mx-auto px-2 sm:px-4">
+  <!-- Back link -->
+  <div class="mb-4">
+    <a href="/admin/profiles" class="btn btn-ghost btn-sm gap-1">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-4 w-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15 19l-7-7 7-7"
+        />
+      </svg>
+      {{ t "back" }}
+    </a>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body p-4 sm:p-6">
+      <h2 class="card-title text-xl sm:text-2xl mb-2">
+        {{ t "admin_profiles_permissions" }}
+      </h2>
+      <p class="text-lg font-medium text-primary mb-2">{{ .Profile.Name }}</p>
+
+      {{ if .Profile.Description }}
+      <p class="text-gray-600 mb-4 text-sm">{{ .Profile.Description }}</p>
+      {{ end }}
+
+      <form
+        action="/admin/profiles/permissions/save?id={{ .Profile.ID }}"
+        method="POST"
+      >
+        <!-- Quick actions for mobile -->
+        <div class="flex gap-2 mb-4 sm:hidden">
+          <button
+            type="button"
+            class="btn btn-outline btn-sm flex-1"
+            onclick="toggleAll(true)"
+          >
+            {{ t "select_all" }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline btn-sm flex-1"
+            onclick="toggleAll(false)"
+          >
+            {{ t "deselect_all" }}
+          </button>
+        </div>
+
+        {{ range $resource, $perms := .PermissionsByResource }}
+        <div
+          class="collapse collapse-arrow bg-base-200 mb-2 sm:collapse-open sm:bg-transparent"
+        >
+          <input type="checkbox" checked class="sm:hidden" />
+          <div
+            class="collapse-title text-lg font-semibold capitalize p-3 sm:p-0 sm:border-b sm:pb-2 sm:mb-3"
+          >
+            {{ $resource }}
+          </div>
+          <div
+            class="collapse-content sm:!visible sm:!h-auto sm:!overflow-visible"
+          >
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 pt-2 sm:pt-0"
+            >
+              {{ range $perms }}
+              <label
+                class="flex items-center gap-3 p-3 rounded-lg hover:bg-base-200 cursor-pointer border border-base-300 sm:border-0"
+              >
+                <input
+                  type="checkbox"
+                  name="permissions"
+                  value="{{ .ID }}"
+                  class="checkbox checkbox-primary checkbox-sm sm:checkbox-md"
+                  {{
+                  if
+                  index
+                  $.CurrentPermissionIDs
+                  .ID
+                  }}checked{{
+                  end
+                  }}
+                />
+                <div class="flex-1 min-w-0">
+                  <span class="font-medium capitalize text-sm sm:text-base"
+                    >{{ .Action }}</span
+                  >
+                  {{ if .Description }}
+                  <p class="text-xs sm:text-sm text-gray-500 truncate">
+                    {{ .Description }}
+                  </p>
+                  {{ end }}
+                </div>
+              </label>
+              {{ end }}
+            </div>
+          </div>
+        </div>
+        {{ end }}
+
+        <!-- Footer actions -->
+        <div
+          class="flex flex-col sm:flex-row justify-between gap-3 mt-6 pt-4 border-t"
+        >
+          <a href="/admin/profiles" class="btn btn-ghost order-2 sm:order-1">
+            {{ t "cancel" }}
+          </a>
+          <div class="flex gap-2 order-1 sm:order-2">
+            <div class="hidden sm:flex gap-2">
+              <button
+                type="button"
+                class="btn btn-outline"
+                onclick="toggleAll(true)"
+              >
+                {{ t "select_all" }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline"
+                onclick="toggleAll(false)"
+              >
+                {{ t "deselect_all" }}
+              </button>
+            </div>
+            <button type="submit" class="btn btn-primary flex-1 sm:flex-none">
+              {{ t "save_permissions" }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleAll(checked) {
+    document.querySelectorAll('input[name="permissions"]').forEach((cb) => {
+      cb.checked = checked;
+    });
+  }
+</script>
+{{ end }}

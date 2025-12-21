@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ block "title" . }}Billing App{{ end }}</title>
+    <script>
+      (function () {
+        function applyTheme(theme) {
+          if (theme === "system") {
+            const systemTheme = window.matchMedia(
+              "(prefers-color-scheme: dark)"
+            ).matches
+              ? "dark"
+              : "light";
+            document.documentElement.setAttribute("data-theme", systemTheme);
+          } else {
+            document.documentElement.setAttribute("data-theme", theme);
+          }
+        }
+        const theme = localStorage.getItem("theme") || "system";
+        applyTheme(theme);
+
+        // Listen for system theme changes
+        window
+          .matchMedia("(prefers-color-scheme: dark)")
+          .addEventListener("change", (e) => {
+            if (
+              localStorage.getItem("theme") === "system" ||
+              !localStorage.getItem("theme")
+            ) {
+              applyTheme("system");
+            }
+          });
+      })();
+    </script>
+    <link rel="stylesheet" href="{{ asset "/tailwind.css" }}">
+    <style>
+      .theme-transition,
+      .theme-transition *,
+      .theme-transition *::before,
+      .theme-transition *::after {
+        transition: background-color 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, fill 0.3s ease, stroke 0.3s ease !important;
+        transition-delay: 0s !important;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-base-200 flex flex-col">
+    {{ template "header.html" . }}
+    <main class="flex-1 container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+      {{ block "content" . }}{{ end }}
+    </main>
+    <footer class="footer footer-center p-4 bg-base-300 text-base-content">
+      <aside>
+        <p class="text-sm">© {{ year }} Billing App</p>
+      </aside>
+    </footer>
+  </body>
+</html>

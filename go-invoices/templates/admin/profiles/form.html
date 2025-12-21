@@ -1,0 +1,60 @@
+{{ define "title" }}{{ if .IsEdit }}{{ t "admin_profiles_edit" }}{{ else }}{{ t "admin_profiles_new" }}{{ end }} - Billing App{{ end }}
+
+{{ define "content" }}
+<div class="max-w-2xl mx-auto px-2 sm:px-4">
+    <!-- Back link for mobile -->
+    <div class="mb-4">
+        <a href="/admin/profiles" class="btn btn-ghost btn-sm gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            {{ t "back" }}
+        </a>
+    </div>
+
+    <div class="card bg-base-100 shadow-xl">
+        <div class="card-body p-4 sm:p-6">
+            <h2 class="card-title text-xl sm:text-2xl mb-4">
+                {{ if .IsEdit }}{{ t "admin_profiles_edit" }}{{ else }}{{ t "admin_profiles_new" }}{{ end }}
+            </h2>
+
+            {{ if .Errors.name }}
+            <div class="alert alert-error mb-4">
+                <span>{{ .Errors.name }}</span>
+            </div>
+            {{ end }}
+
+            <form action="{{ if .IsEdit }}/admin/profiles/update?id={{ .Profile.ID }}{{ else }}/admin/profiles/create{{ end }}" method="POST">
+                <div class="form-control mb-4">
+                    <label class="label" for="name">
+                        <span class="label-text">{{ t "profile_name" }} *</span>
+                    </label>
+                    <input type="text" id="name" name="name" 
+                        class="input input-bordered w-full {{ if .Errors.name }}input-error{{ end }}"
+                        value="{{ if .Profile }}{{ .Profile.Name }}{{ end }}"
+                        placeholder="{{ t "profile_name_placeholder" }}"
+                        required>
+                </div>
+
+                <div class="form-control mb-6">
+                    <label class="label" for="description">
+                        <span class="label-text">{{ t "profile_description" }}</span>
+                    </label>
+                    <textarea id="description" name="description" 
+                        class="textarea textarea-bordered w-full h-24"
+                        placeholder="{{ t "profile_description_placeholder" }}">{{ if .Profile }}{{ .Profile.Description }}{{ end }}</textarea>
+                </div>
+
+                <div class="flex flex-col-reverse sm:flex-row justify-between gap-2">
+                    <a href="/admin/profiles" class="btn btn-ghost">
+                        {{ t "cancel" }}
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        {{ if .IsEdit }}{{ t "save" }}{{ else }}{{ t "create" }}{{ end }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{ end }}

@@ -1,0 +1,147 @@
+<div class="navbar bg-base-100 shadow-sm px-2 sm:px-4">
+  <!-- Navbar Start: Brand & Mobile Menu -->
+  <div class="navbar-start">
+    <div class="dropdown">
+      <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+        </svg>
+      </div>
+      <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+        {{ if .IsLoggedIn }}
+          <li><a href="/dashboard">{{ t "nav_dashboard" }}</a></li>
+          {{ if can "product" "list" }}<li><a href="/products">{{ t "nav_products" }}</a></li>{{ end }}
+          {{ if can "invoice" "list" }}<li><a href="/invoices">{{ t "nav_invoices" }}</a></li>{{ end }}
+          {{ if can "client" "list" }}<li><a href="/clients">{{ t "nav_clients" }}</a></li>{{ end }}
+          {{ if isAdmin }}
+          <li>
+            <span class="menu-title">{{ t "nav_admin" }}</span>
+            <ul>
+              <li><a href="/admin/profiles">{{ t "nav_admin_profiles" }}</a></li>
+              <li><a href="/admin/users">{{ t "nav_admin_users" }}</a></li>
+            </ul>
+          </li>
+          {{ end }}
+          <li class="divider"></li>
+          <li><a href="/settings">{{ t "nav_settings" }}</a></li>
+          <li><a href="/logout" class="text-error">{{ t "nav_logout" }}</a></li>
+        {{ else }}
+          <li><a href="/login">{{ t "nav_login" }}</a></li>
+          <li><a href="/signup">{{ t "nav_signup" }}</a></li>
+        {{ end }}
+      </ul>
+    </div>
+    <a href="/" class="btn btn-ghost text-xl font-bold tracking-tight">Billing App</a>
+  </div>
+
+  <!-- Navbar Center: Desktop Menu -->
+  <div class="navbar-center hidden lg:flex">
+    <ul class="menu menu-horizontal px-1 gap-1">
+      {{ if .IsLoggedIn }}
+        <li><a href="/dashboard">{{ t "nav_dashboard" }}</a></li>
+        {{ if can "product" "list" }}<li><a href="/products">{{ t "nav_products" }}</a></li>{{ end }}
+        {{ if can "invoice" "list" }}<li><a href="/invoices">{{ t "nav_invoices" }}</a></li>{{ end }}
+        {{ if can "client" "list" }}<li><a href="/clients">{{ t "nav_clients" }}</a></li>{{ end }}
+        {{ if isAdmin }}
+        <li>
+          <details>
+            <summary>{{ t "nav_admin" }}</summary>
+            <ul class="p-2 bg-base-100 rounded-t-none shadow-lg z-[10]">
+              <li><a href="/admin/profiles">{{ t "nav_admin_profiles" }}</a></li>
+              <li><a href="/admin/users">{{ t "nav_admin_users" }}</a></li>
+            </ul>
+          </details>
+        </li>
+        {{ end }}
+      {{ end }}
+    </ul>
+  </div>
+
+  <!-- Navbar End: Utilities & Auth -->
+  <div class="navbar-end gap-1 sm:gap-2">
+    <!-- Language Selector -->
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-sm px-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+        </svg>
+        <span class="uppercase text-xs font-bold">{{ lang }}</span>
+      </div>
+      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-32 mt-2">
+        <li><a onclick="switchLanguage('fr')" class="{{ if eq (lang) "fr" }}active{{ end }}">🇫🇷 Français</a></li>
+        <li><a onclick="switchLanguage('en')" class="{{ if eq (lang) "en" }}active{{ end }}">🇬🇧 English</a></li>
+      </ul>
+    </div>
+
+    <!-- Theme Selector -->
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-sm btn-circle">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </div>
+      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-32 mt-2">
+        <li><a onclick="setTheme('light')" id="theme-light">☀️ Light</a></li>
+        <li><a onclick="setTheme('dark')" id="theme-dark">🌙 Dark</a></li>
+        <li><a onclick="setTheme('system')" id="theme-system">💻 System</a></li>
+      </ul>
+    </div>
+
+    <!-- Desktop Auth Buttons -->
+    <div class="hidden lg:flex gap-2 ml-2">
+      {{ if .IsLoggedIn }}
+        <a href="/settings" class="btn btn-ghost btn-sm">{{ t "nav_settings" }}</a>
+        <a href="/logout" class="btn btn-outline btn-sm btn-error">{{ t "nav_logout" }}</a>
+      {{ else }}
+        <a href="/login" class="btn btn-ghost btn-sm">{{ t "nav_login" }}</a>
+        <a href="/signup" class="btn btn-primary btn-sm">{{ t "nav_signup" }}</a>
+      {{ end }}
+    </div>
+  </div>
+</div>
+
+<script>
+  function initThemeToggle() {
+    const theme = localStorage.getItem('theme') || 'system';
+    updateThemeUI(theme);
+  }
+
+  function updateThemeUI(theme) {
+    // Remove active class from all theme options
+    ['light', 'dark', 'system'].forEach(t => {
+      const el = document.getElementById('theme-' + t);
+      if (el) el.classList.remove('active');
+    });
+    // Add active class to current theme option
+    const currentEl = document.getElementById('theme-' + theme);
+    if (currentEl) currentEl.classList.add('active');
+  }
+
+  function setTheme(theme) {
+    const html = document.documentElement;
+    
+    html.classList.add('theme-transition');
+    localStorage.setItem('theme', theme);
+    
+    if (theme === 'system') {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      html.setAttribute('data-theme', systemTheme);
+    } else {
+      html.setAttribute('data-theme', theme);
+    }
+    
+    updateThemeUI(theme);
+    
+    setTimeout(() => {
+      html.classList.remove('theme-transition');
+    }, 300);
+  }
+
+  function switchLanguage(lang) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', lang);
+    window.location.href = url.toString();
+  }
+
+  document.addEventListener('DOMContentLoaded', initThemeToggle);
+</script>

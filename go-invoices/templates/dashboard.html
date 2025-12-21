@@ -1,0 +1,167 @@
+{{ define "title" }}{{ t "dashboard_title" }} - Billing App{{ end }}
+
+{{ define "content" }}
+<div class="space-y-6">
+  <!-- Welcome Section -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-bold">{{ t "dashboard_welcome_prefix" }}{{ if .User }}, {{ .User.Name }}{{ end }}</h1>
+      <p class="text-base-content/70">{{ t "dashboard_overview" }}</p>
+    </div>
+    <div class="flex gap-2">
+      <a href="/invoices/new" class="btn btn-primary btn-sm sm:btn-md">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        {{ t "action_new_invoice" }}
+      </a>
+    </div>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="stat bg-base-100 rounded-lg shadow">
+      <div class="stat-figure text-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      </div>
+      <div class="stat-title">{{ t "stats_invoices" }}</div>
+      <div class="stat-value text-primary">{{ .Stats.Invoices }}</div>
+    </div>
+    
+    <div class="stat bg-base-100 rounded-lg shadow">
+      <div class="stat-figure text-secondary">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+      </div>
+      <div class="stat-title">{{ t "stats_clients" }}</div>
+      <div class="stat-value text-secondary">{{ .Stats.Clients }}</div>
+    </div>
+    
+    <div class="stat bg-base-100 rounded-lg shadow">
+      <div class="stat-figure text-accent">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+        </svg>
+      </div>
+      <div class="stat-title">{{ t "stats_products" }}</div>
+      <div class="stat-value text-accent">{{ .Stats.Products }}</div>
+    </div>
+    
+    <div class="stat bg-base-100 rounded-lg shadow">
+      <div class="stat-figure text-success">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <div class="stat-title">Revenue</div>
+      <div class="stat-value text-success">{{ .Stats.Revenue }}</div>
+    </div>
+  </div>
+
+  <!-- Quick Actions & Company Profile -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Quick Actions -->
+    <div class="card bg-base-100 shadow">
+      <div class="card-body">
+        <h2 class="card-title">{{ t "quick_actions_title" }}</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4">
+          <a href="/invoices/new" class="btn btn-outline btn-sm">
+            {{ t "action_new_invoice" }}
+          </a>
+          <a href="/clients" class="btn btn-outline btn-sm">
+            {{ t "action_clients" }}
+          </a>
+          <a href="/products" class="btn btn-outline btn-sm">
+            {{ t "nav_products" }}
+          </a>
+          <a href="/setup" class="btn btn-outline btn-sm">
+            {{ t "shortcut_edit_company" }}
+          </a>
+          <a href="/profile" class="btn btn-outline btn-sm">
+            {{ t "shortcut_profile" }}
+          </a>
+          <a href="/invoices" class="btn btn-outline btn-sm">
+            {{ t "shortcut_view_invoices" }}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Company Profile -->
+    <div class="card bg-base-100 shadow">
+      <div class="card-body">
+        <h2 class="card-title">{{ t "company_profile_title" }}</h2>
+        {{ if .Company }}
+        <div class="space-y-2 mt-2">
+          <p class="font-semibold">{{ .Company.Name }}</p>
+          <p class="text-sm text-base-content/70">{{ .Company.Address }}</p>
+          {{ if .Company.SIRET }}
+          <p class="text-xs badge badge-ghost">SIRET: {{ .Company.SIRET }}</p>
+          {{ end }}
+        </div>
+        <div class="card-actions justify-end mt-4">
+          <a href="/setup" class="btn btn-sm btn-ghost">{{ t "shortcut_edit_company" }}</a>
+        </div>
+        {{ else }}
+        <div class="alert alert-warning mt-2">
+          <span>{{ t "company_not_configured" }}</span>
+        </div>
+        <div class="card-actions justify-end mt-2">
+          <a href="/setup" class="btn btn-sm btn-primary">{{ t "company_complete_setup" }}</a>
+        </div>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Recent Products -->
+    <div class="card bg-base-100 shadow">
+      <div class="card-body">
+        <div class="flex items-center justify-between">
+          <h2 class="card-title">{{ t "recent_products_title" }}</h2>
+          <a href="/products" class="btn btn-ghost btn-sm">View all</a>
+        </div>
+        {{ if .RecentProducts }}
+        <ul class="divide-y divide-base-200 mt-2">
+          {{ range .RecentProducts }}
+          <li class="py-2 flex justify-between items-center">
+            <span class="font-medium">{{ .Name }}</span>
+            <span class="badge badge-ghost">{{ .Code }}</span>
+          </li>
+          {{ end }}
+        </ul>
+        {{ else }}
+        <p class="text-base-content/50 mt-2">{{ t "no_products" }}</p>
+        {{ end }}
+      </div>
+    </div>
+
+    <!-- Recent Invoices -->
+    <div class="card bg-base-100 shadow">
+      <div class="card-body">
+        <div class="flex items-center justify-between">
+          <h2 class="card-title">{{ t "recent_invoices_title" }}</h2>
+          <a href="/invoices" class="btn btn-ghost btn-sm">View all</a>
+        </div>
+        {{ if .RecentInvoices }}
+        <ul class="divide-y divide-base-200 mt-2">
+          {{ range .RecentInvoices }}
+          <li class="py-2 flex justify-between items-center">
+            <span class="font-medium">#{{ .Number }}</span>
+            <span class="badge {{ if eq .Status "final" }}badge-success{{ else }}badge-warning{{ end }}">{{ .Status }}</span>
+          </li>
+          {{ end }}
+        </ul>
+        {{ else }}
+        <p class="text-base-content/50 mt-2">{{ t "no_invoices" }}</p>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}

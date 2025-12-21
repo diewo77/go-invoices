@@ -1,0 +1,86 @@
+{{ define "title" }}{{ t "landing_title" }}{{ end }} {{ define "content" }}
+<div class="space-y-16">
+  <!-- Hero Section -->
+  <section class="hero min-h-[60vh] bg-base-200 rounded-3xl overflow-hidden">
+    <div class="hero-content text-center">
+      <div class="max-w-2xl">
+        <h1 class="text-5xl font-bold mb-6">{{ t "landing_hero_title" }}</h1>
+        <p class="text-xl mb-8 opacity-80">{{ t "landing_hero_subtitle" }}</p>
+        <div class="flex justify-center gap-4">
+          {{ if .IsLoggedIn }}
+          <a href="/dashboard" class="btn btn-primary btn-lg"
+            >{{ t "nav_dashboard" }}</a
+          >
+          {{ else }}
+          <a href="/signup" class="btn btn-primary btn-lg"
+            >{{ t "home_cta_get_started" }}</a
+          >
+          <a href="/login" class="btn btn-outline btn-lg"
+            >{{ t "home_cta_sign_in" }}</a
+          >
+          {{ end }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Grid -->
+  <section class="py-12">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold mb-4">{{ t "home_section_all_need" }}</h2>
+      <p class="text-lg opacity-70">{{ t "home_tagline_sub" }}</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Feature 1 -->
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body items-center text-center">
+          <div
+            class="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-4 text-3xl"
+          >
+            📦
+          </div>
+          <h3 class="card-title">{{ t "landing_feat_products_title" }}</h3>
+          <p>{{ t "landing_feat_products_body" }}</p>
+        </div>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body items-center text-center">
+          <div
+            class="w-16 h-16 bg-secondary/10 text-secondary rounded-full flex items-center justify-center mb-4 text-3xl"
+          >
+            📄
+          </div>
+          <h3 class="card-title">{{ t "landing_feat_invoices_title" }}</h3>
+          <p>{{ t "landing_feat_invoices_body" }}</p>
+        </div>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body items-center text-center">
+          <div
+            class="w-16 h-16 bg-accent/10 text-accent rounded-full flex items-center justify-center mb-4 text-3xl"
+          >
+            ⚙️
+          </div>
+          <h3 class="card-title">{{ t "landing_feat_setup_title" }}</h3>
+          <p>{{ t "landing_feat_setup_body" }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="bg-primary text-primary-content rounded-3xl p-12 text-center">
+    <h2 class="text-4xl font-bold mb-6">{{ t "home_tagline_title" }}</h2>
+    <p class="text-xl mb-8 opacity-90">{{ t "home_tagline_sub" }}</p>
+    {{ if not .IsLoggedIn }}
+    <a href="/signup" class="btn btn-secondary btn-lg"
+      >{{ t "home_cta_get_started" }}</a
+    >
+    {{ end }}
+  </section>
+</div>
+{{ end }}

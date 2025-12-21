@@ -1,0 +1,71 @@
+{{ define "title" }}{{ .Product.Name }}{{ end }}
+
+{{ define "content" }}
+<div class="max-w-4xl mx-auto">
+    <div class="mb-6 flex justify-between items-end">
+        <div>
+            <a href="/products" class="btn btn-ghost btn-sm mb-2">← {{ t "back_to_list" }}</a>
+            <h1 class="text-2xl font-bold">{{ .Product.Name }}</h1>
+        </div>
+        <div class="flex gap-2">
+            <a href="/products/{{ .Product.ID }}/edit" class="btn btn-primary btn-sm">{{ t "edit" }}</a>
+            <form action="/products/{{ .Product.ID }}/delete" method="POST" onsubmit="return confirm('{{ t "confirm_delete" }}')">
+                <button type="submit" class="btn btn-error btn-sm">{{ t "delete" }}</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="md:col-span-2 space-y-6">
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title">{{ t "product_details" }}</h2>
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <div class="text-sm opacity-50">{{ t "code" }}</div>
+                            <div class="font-mono font-medium">{{ .Product.Code }}</div>
+                        </div>
+                        <div>
+                            <div class="text-sm opacity-50">{{ t "category" }}</div>
+                            <div class="font-medium">{{ if .Product.Category }}{{ .Product.Category }}{{ else }}---{{ end }}</div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <h3 class="font-bold mb-2">{{ t "description" }}</h3>
+                    <p class="whitespace-pre-line">{{ if .Product.Description }}{{ .Product.Description }}{{ else }}---{{ end }}</p>
+
+                    <div class="divider"></div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <div class="text-sm opacity-50">{{ t "unit_price" }}</div>
+                            <div class="text-2xl font-bold">{{ .Product.UnitPrice }} € <span class="text-sm font-normal opacity-50">/ {{ .Product.Unit }}</span></div>
+                        </div>
+                        <div>
+                            <div class="text-sm opacity-50">{{ t "vat_rate" }}</div>
+                            <div class="text-2xl font-bold">{{ mul .Product.VATRate 100 }}%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title">{{ t "status" }}</h2>
+                    <div class="flex items-center gap-2 mt-2">
+                        {{ if .Product.IsActive }}
+                        <span class="badge badge-success">{{ t "active" }}</span>
+                        {{ else }}
+                        <span class="badge badge-ghost">{{ t "inactive" }}</span>
+                        {{ end }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}

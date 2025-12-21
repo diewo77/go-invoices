@@ -1,0 +1,175 @@
+{{ define "title" }}{{ t "company_settings" }}{{ end }} {{ define "content" }}
+<div class="max-w-4xl mx-auto">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold">{{ t "company_settings" }}</h1>
+    <p class="text-sm opacity-50">{{ t "company_settings_help" }}</p>
+  </div>
+
+  <form action="/settings" method="POST" class="space-y-6">
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">{{ t "general_information" }}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "company_name" }}</span></label
+            >
+            <input
+              type="text"
+              name="name"
+              value="{{ .Settings.Name }}"
+              class="input input-bordered w-full"
+              required
+            />
+          </div>
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "email" }}</span></label
+            >
+            <input
+              type="email"
+              name="email"
+              value="{{ .Settings.Email }}"
+              class="input input-bordered w-full"
+            />
+          </div>
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "phone" }}</span></label
+            >
+            <input
+              type="text"
+              name="phone"
+              value="{{ .Settings.Phone }}"
+              class="input input-bordered w-full"
+            />
+          </div>
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "website" }}</span></label
+            >
+            <input
+              type="url"
+              name="website"
+              value="{{ .Settings.Website }}"
+              class="input input-bordered w-full"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">{{ t "address" }}</h2>
+        <div class="form-control w-full">
+          <label class="label"
+            ><span class="label-text">{{ t "street_address" }}</span></label
+          >
+          <input
+            type="text"
+            name="address"
+            value="{{ .Settings.Address }}"
+            class="input input-bordered w-full"
+          />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "postal_code" }}</span></label
+            >
+            <input
+              type="text"
+              name="postal_code"
+              value="{{ .Settings.PostalCode }}"
+              class="input input-bordered w-full"
+            />
+          </div>
+          <div class="form-control w-full md:col-span-2">
+            <label class="label"
+              ><span class="label-text">{{ t "city" }}</span></label
+            >
+            <input
+              type="text"
+              name="city"
+              value="{{ .Settings.City }}"
+              class="input input-bordered w-full"
+            />
+          </div>
+        </div>
+        <div class="form-control w-full">
+          <label class="label"
+            ><span class="label-text">{{ t "country" }}</span></label
+          >
+          <input
+            type="text"
+            name="country"
+            value="{{ .Settings.Country }}"
+            class="input input-bordered w-full"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">{{ t "legal_and_tax" }}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "siret" }}</span></label
+            >
+            <input
+              type="text"
+              name="siret"
+              value="{{ .Settings.SIRET }}"
+              class="input input-bordered w-full"
+            />
+          </div>
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "vat_number" }}</span></label
+            >
+            <input
+              type="text"
+              name="vat_number"
+              value="{{ .Settings.VATNumber }}"
+              class="input input-bordered w-full"
+            />
+          </div>
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "rcs" }}</span></label
+            >
+            <input
+              type="text"
+              name="rcs"
+              value="{{ .Settings.RCS }}"
+              class="input input-bordered w-full"
+              placeholder="ex: RCS Paris B 123 456 789"
+            />
+          </div>
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "capital" }}</span></label
+            >
+            <input
+              type="text"
+              name="capital"
+              value="{{ .Settings.Capital }}"
+              class="input input-bordered w-full"
+              placeholder="ex: 10 000 €"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-4">
+      <button type="submit" class="btn btn-primary">
+        {{ t "save_settings" }}
+      </button>
+    </div>
+  </form>
+</div>
+{{ end }}

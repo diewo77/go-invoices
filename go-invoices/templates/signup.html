@@ -1,0 +1,112 @@
+{{ define "title" }}{{ t "nav_signup" }} - Billing App{{ end }} {{ define
+"content" }}
+<div class="min-h-[60vh] flex items-center justify-center">
+  <div class="card w-full max-w-md bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title text-2xl justify-center mb-4">
+        {{ t "nav_signup" }}
+      </h2>
+
+      {{ if .Error }}
+      <div class="alert alert-error mb-4">
+        <span>{{ .Error }}</span>
+      </div>
+      {{ end }}
+
+      <form method="POST" action="/signup" class="space-y-4">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Name</span>
+          </label>
+          <input
+            type="text"
+            name="name"
+            class="input input-bordered w-full{{ if .Errors.name }} input-error{{ end }}"
+            placeholder="John Doe"
+            value="{{ .Name }}"
+          />
+          {{ if .Errors.name }}
+          <label class="label">
+            <span class="label-text-alt text-error">{{ .Errors.name }}</span>
+          </label>
+          {{ end }}
+        </div>
+
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Email</span>
+          </label>
+          <input
+            type="email"
+            name="email"
+            class="input input-bordered w-full{{ if .Errors.email }} input-error{{ end }}"
+            placeholder="you@example.com"
+            value="{{ .Email }}"
+            required
+          />
+          {{ if .Errors.email }}
+          <label class="label">
+            <span class="label-text-alt text-error">{{ .Errors.email }}</span>
+          </label>
+          {{ end }}
+        </div>
+
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">{{ t "profile_new_password" }}</span>
+          </label>
+          <input
+            type="password"
+            name="password"
+            class="input input-bordered w-full{{ if .Errors.password }} input-error{{ end }}"
+            placeholder="••••••••"
+            minlength="8"
+            required
+          />
+          {{ if .Errors.password }}
+          <label class="label">
+            <span class="label-text-alt text-error"
+              >{{ .Errors.password }}</span
+            >
+          </label>
+          {{ end }}
+        </div>
+
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">{{ t "profile_confirm_password" }}</span>
+          </label>
+          <input
+            type="password"
+            name="password_confirm"
+            class="input input-bordered w-full{{ if .Errors.password_confirm }} input-error{{ end }}"
+            placeholder="••••••••"
+            minlength="8"
+            required
+          />
+          {{ if .Errors.password_confirm }}
+          <label class="label">
+            <span class="label-text-alt text-error"
+              >{{ .Errors.password_confirm }}</span
+            >
+          </label>
+          {{ end }}
+        </div>
+
+        <div class="form-control mt-6">
+          <button type="submit" class="btn btn-primary w-full">
+            {{ t "nav_signup" }}
+          </button>
+        </div>
+      </form>
+
+      <div class="divider">OR</div>
+
+      <p class="text-center text-sm">
+        Already have an account?
+        <a href="/login" class="link link-primary">{{ t "nav_login" }}</a>
+      </p>
+    </div>
+  </div>
+</div>
+{{ end }}

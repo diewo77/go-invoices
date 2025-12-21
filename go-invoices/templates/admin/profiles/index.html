@@ -1,0 +1,131 @@
+{{ define "title" }}{{ t "admin_profiles_title" }} - Billing App{{ end }}
+
+{{ define "content" }}
+<div class="max-w-6xl mx-auto px-2 sm:px-4">
+    <!-- Header: stacks on mobile -->
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+        <h1 class="text-2xl sm:text-3xl font-bold">{{ t "admin_profiles_title" }}</h1>
+        <a href="/admin/profiles/new" class="btn btn-primary btn-sm sm:btn-md">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            {{ t "admin_profiles_new" }}
+        </a>
+    </div>
+
+    {{ if .Flash }}
+    <div class="alert alert-success mb-4">
+        <span>{{ .Flash }}</span>
+    </div>
+    {{ end }}
+
+    <!-- Desktop table view (hidden on mobile) -->
+    <div class="hidden md:block overflow-x-auto">
+        <table class="table table-zebra w-full">
+            <thead>
+                <tr>
+                    <th>{{ t "profile_name" }}</th>
+                    <th>{{ t "profile_description" }}</th>
+                    <th>{{ t "profile_permissions_count" }}</th>
+                    <th>{{ t "profile_users_count" }}</th>
+                    <th>{{ t "profile_system" }}</th>
+                    <th class="text-right">{{ t "actions" }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range .Profiles }}
+                <tr>
+                    <td class="font-medium">{{ .Name }}</td>
+                    <td>{{ .Description }}</td>
+                    <td>
+                        <span class="badge badge-info">{{ len .Permissions }}</span>
+                    </td>
+                    <td>
+                        <span class="badge badge-ghost">{{ len .Users }}</span>
+                    </td>
+                    <td>
+                        {{ if .IsSystem }}
+                        <span class="badge badge-warning">{{ t "yes" }}</span>
+                        {{ else }}
+                        <span class="badge badge-ghost">{{ t "no" }}</span>
+                        {{ end }}
+                    </td>
+                    <td class="text-right">
+                        <div class="join">
+                            <a href="/admin/profiles/permissions?id={{ .ID }}" class="btn btn-sm btn-outline join-item">
+                                {{ t "profile_edit_permissions" }}
+                            </a>
+                            <a href="/admin/profiles/edit?id={{ .ID }}" class="btn btn-sm btn-outline join-item">
+                                {{ t "edit" }}
+                            </a>
+                            {{ if not .IsSystem }}
+                            <form action="/admin/profiles/delete?id={{ .ID }}" method="POST" class="inline"
+                                onsubmit="return confirm('{{ t "confirm_delete" }}');">
+                                <button type="submit" class="btn btn-sm btn-error btn-outline join-item">
+                                    {{ t "delete" }}
+                                </button>
+                            </form>
+                            {{ end }}
+                        </div>
+                    </td>
+                </tr>
+                {{ else }}
+                <tr>
+                    <td colspan="6" class="text-center py-8 text-gray-500">
+                        {{ t "admin_profiles_empty" }}
+                    </td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Mobile card view (hidden on desktop) -->
+    <div class="md:hidden space-y-4">
+        {{ range .Profiles }}
+        <div class="card bg-base-100 shadow-md">
+            <div class="card-body p-4">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 class="card-title text-lg">{{ .Name }}</h2>
+                        {{ if .IsSystem }}
+                        <span class="badge badge-warning badge-sm">{{ t "profile_system" }}</span>
+                        {{ end }}
+                    </div>
+                    <div class="dropdown dropdown-end">
+                        <label tabindex="0" class="btn btn-ghost btn-sm btn-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                            </svg>
+                        </label>
+                        <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48 z-[1]">
+                            <li><a href="/admin/profiles/permissions?id={{ .ID }}">{{ t "profile_edit_permissions" }}</a></li>
+                            <li><a href="/admin/profiles/edit?id={{ .ID }}">{{ t "edit" }}</a></li>
+                            {{ if not .IsSystem }}
+                            <li>
+                                <form action="/admin/profiles/delete?id={{ .ID }}" method="POST"
+                                    onsubmit="return confirm('{{ t "confirm_delete" }}');">
+                                    <button type="submit" class="text-error w-full text-left">{{ t "delete" }}</button>
+                                </form>
+                            </li>
+                            {{ end }}
+                        </ul>
+                    </div>
+                </div>
+                {{ if .Description }}
+                <p class="text-sm text-gray-600 mt-1">{{ .Description }}</p>
+                {{ end }}
+                <div class="flex gap-2 mt-3">
+                    <span class="badge badge-info badge-sm">{{ len .Permissions }} {{ t "profile_permissions_count" }}</span>
+                    <span class="badge badge-ghost badge-sm">{{ len .Users }} {{ t "profile_users_count" }}</span>
+                </div>
+            </div>
+        </div>
+        {{ else }}
+        <div class="text-center py-8 text-gray-500">
+            {{ t "admin_profiles_empty" }}
+        </div>
+        {{ end }}
+    </div>
+</div>
+{{ end }}

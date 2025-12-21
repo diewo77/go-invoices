@@ -1,0 +1,147 @@
+{{ define "title" }}{{ t "admin_users_title" }} - Billing App{{ end }} {{ define
+"content" }}
+<div class="max-w-6xl mx-auto px-2 sm:px-4">
+  <div
+    class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6"
+  >
+    <h1 class="text-2xl sm:text-3xl font-bold">{{ t "admin_users_title" }}</h1>
+  </div>
+
+  {{ if .Flash }}
+  <div class="alert alert-success mb-4">
+    <span>{{ .Flash }}</span>
+  </div>
+  {{ end }}
+
+  <!-- Desktop table view -->
+  <div class="hidden md:block overflow-x-auto">
+    <table class="table table-zebra w-full">
+      <thead>
+        <tr>
+          <th>{{ t "user_email" }}</th>
+          <th>{{ t "user_name" }}</th>
+          <th>{{ t "user_profile" }}</th>
+          <th class="text-right">{{ t "actions" }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ $profiles := .Profiles }} {{ range .Users }}
+        <tr>
+          <td>{{ .Email }}</td>
+          <td>{{ .Name }}</td>
+          <td>
+            {{ if .Profile }}
+            <span class="badge badge-primary">{{ .Profile.Name }}</span>
+            {{ else }}
+            <span class="badge badge-ghost">{{ t "no_profile" }}</span>
+            {{ end }}
+          </td>
+          <td class="text-right">
+            <form
+              action="/admin/users/assign-profile"
+              method="POST"
+              class="flex items-center justify-end gap-2"
+            >
+              <input type="hidden" name="user_id" value="{{ .ID }}" />
+              <select
+                name="profile_id"
+                class="select select-bordered select-sm w-48"
+              >
+                <option value="">{{ t "select_profile" }}</option>
+                {{ $currentProfileID := 0 }} {{ if .Profile }}{{
+                $currentProfileID = .Profile.ID }}{{ end }} {{ range $profiles
+                }}
+                <option
+                  value="{{ .ID }}"
+                  {{
+                  if
+                  eq
+                  .ID
+                  $currentProfileID
+                  }}selected{{
+                  end
+                  }}
+                >
+                  {{ .Name }}
+                </option>
+                {{ end }}
+              </select>
+              <button type="submit" class="btn btn-sm btn-primary">
+                {{ t "assign" }}
+              </button>
+            </form>
+          </td>
+        </tr>
+        {{ else }}
+        <tr>
+          <td colspan="4" class="text-center py-8 text-gray-500">
+            {{ t "admin_users_empty" }}
+          </td>
+        </tr>
+        {{ end }}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Mobile card view -->
+  <div class="md:hidden space-y-4">
+    {{ $profiles := .Profiles }} {{ range .Users }}
+    <div class="card bg-base-100 shadow-md">
+      <div class="card-body p-4">
+        <div class="flex flex-col gap-1">
+          <h2 class="font-medium">{{ .Email }}</h2>
+          {{ if .Name }}
+          <p class="text-sm text-gray-600">{{ .Name }}</p>
+          {{ end }}
+        </div>
+
+        <div class="mt-2">
+          {{ if .Profile }}
+          <span class="badge badge-primary">{{ .Profile.Name }}</span>
+          {{ else }}
+          <span class="badge badge-ghost">{{ t "no_profile" }}</span>
+          {{ end }}
+        </div>
+
+        <form
+          action="/admin/users/assign-profile"
+          method="POST"
+          class="mt-3 pt-3 border-t flex flex-col gap-2"
+        >
+          <input type="hidden" name="user_id" value="{{ .ID }}" />
+          <select
+            name="profile_id"
+            class="select select-bordered select-sm w-full"
+          >
+            <option value="">{{ t "select_profile" }}</option>
+            {{ $currentProfileID := 0 }} {{ if .Profile }}{{ $currentProfileID =
+            .Profile.ID }}{{ end }} {{ range $profiles }}
+            <option
+              value="{{ .ID }}"
+              {{
+              if
+              eq
+              .ID
+              $currentProfileID
+              }}selected{{
+              end
+              }}
+            >
+              {{ .Name }}
+            </option>
+            {{ end }}
+          </select>
+          <button type="submit" class="btn btn-sm btn-primary w-full">
+            {{ t "assign" }}
+          </button>
+        </form>
+      </div>
+    </div>
+    {{ else }}
+    <div class="text-center py-8 text-gray-500">
+      {{ t "admin_users_empty" }}
+    </div>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

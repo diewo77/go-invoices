@@ -1,0 +1,161 @@
+{{ define "title" }}{{ t "edit_invoice" }}{{ end }}
+
+{{ define "content" }}
+<div class="max-w-4xl mx-auto">
+    <div class="mb-6 flex justify-between items-end">
+        <div>
+            <a href="/invoices" class="btn btn-ghost btn-sm mb-2">← {{ t "back_to_list" }}</a>
+            <h1 class="text-2xl font-bold">{{ t "edit_invoice" }} {{ .Invoice.Number }}</h1>
+        </div>
+        <div class="flex gap-2">
+            <form action="/invoices/{{ .Invoice.ID }}/finalize" method="POST" onsubmit="return confirm('{{ t "confirm_finalize" }}')">
+                <button type="submit" class="btn btn-info btn-sm">{{ t "finalize" }}</button>
+            </form>
+            <a href="/invoices/{{ .Invoice.ID }}" class="btn btn-ghost btn-sm">{{ t "view" }}</a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Items Card -->
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">{{ t "items" }}</h2>
+                    <div class="overflow-x-auto">
+                        <table class="table w-full">
+                            <thead>
+                                <tr>
+                                    <th>{{ t "description" }}</th>
+                                    <th class="text-right">{{ t "qty" }}</th>
+                                    <th class="text-right">{{ t "unit_price" }}</th>
+                                    <th class="text-right">{{ t "total_ht" }}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{ range .Invoice.Items }}
+                                <tr>
+                                    <td>
+                                        <div class="font-medium">{{ .Description }}</div>
+                                        <div class="text-xs opacity-50">{{ .Product.Code }}</div>
+                                    </td>
+                                    <td class="text-right">{{ .Quantity }}</td>
+                                    <td class="text-right">{{ .UnitPrice }} €</td>
+                                    <td class="text-right font-medium">{{ .TotalHT }} €</td>
+                                    <td class="text-right">
+                                        <form action="/invoices/{{ $.Invoice.ID }}/items/{{ .ID }}/delete" method="POST">
+                                            <button type="submit" class="btn btn-ghost btn-xs text-error">✕</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {{ else }}
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-base-content/50 italic">
+                                        {{ t "no_items_yet" }}
+                                    </td>
+                                </tr>
+                                {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="divider mt-8">{{ t "add_item" }}</div>
+                    
+                    <form action="/invoices/{{ .Invoice.ID }}/items" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-2 items-end">
+                        <div class="form-control md:col-span-2">
+                            <label class="label"><span class="label-text text-xs">{{ t "product" }}</span></label>
+                            <select name="product_id" class="select select-bordered select-sm w-full" required>
+                                <option value="" disabled selected>{{ t "select_product" }}</option>
+                                {{ range .Products }}
+                                <option value="{{ .ID }}">{{ .Name }} ({{ .UnitPrice }} €)</option>
+                                {{ end }}
+                            </select>
+                        </div>
+                        <div class="form-control">
+                            <label class="label"><span class="label-text text-xs">{{ t "quantity" }}</span></label>
+                            <input type="number" step="0.01" name="quantity" value="1" class="input input-bordered input-sm w-full" required />
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm">{{ t "add" }}</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Notes Card -->
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">{{ t "notes_and_terms" }}</h2>
+                    <form action="/invoices/{{ .Invoice.ID }}" method="POST">
+                        <input type="hidden" name="client_id" value="{{ .Invoice.ClientID }}">
+                        <input type="hidden" name="issue_date" value="{{ .Invoice.IssueDate.Format "2006-01-02" }}">
+                        <input type="hidden" name="due_date" value="{{ .Invoice.DueDate.Format "2006-01-02" }}">
+                        
+                        <div class="form-control">
+                            <label class="label"><span class="label-text">{{ t "notes" }}</span></label>
+                            <textarea name="notes" class="textarea textarea-bordered h-24">{{ .Invoice.Notes }}</textarea>
+                        </div>
+                        <div class="form-control mt-2">
+                            <label class="label"><span class="label-text">{{ t "payment_terms" }}</span></label>
+                            <input type="text" name="payment_terms" value="{{ .Invoice.PaymentTerms }}" class="input input-bordered w-full" />
+                        </div>
+                        <div class="card-actions justify-end mt-4">
+                            <button type="submit" class="btn btn-ghost btn-sm">{{ t "save_notes" }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <!-- Summary Card -->
+            <div class="card bg-primary text-primary-content shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title">{{ t "summary" }}</h2>
+                    <div class="space-y-2 mt-4">
+                        <div class="flex justify-between">
+                            <span>{{ t "total_ht" }}</span>
+                            <span>{{ .Invoice.TotalHT }} €</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>{{ t "total_vat" }}</span>
+                            <span>{{ .Invoice.TotalVAT }} €</span>
+                        </div>
+                        <div class="divider before:bg-primary-content/20 after:bg-primary-content/20 my-1"></div>
+                        <div class="flex justify-between text-xl font-bold">
+                            <span>{{ t "total_ttc" }}</span>
+                            <span>{{ .Invoice.TotalTTC }} €</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Client Card -->
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">{{ t "client_info" }}</h2>
+                    <form action="/invoices/{{ .Invoice.ID }}" method="POST" class="space-y-4">
+                        <div class="form-control">
+                            <label class="label"><span class="label-text">{{ t "client" }}</span></label>
+                            <select name="client_id" class="select select-bordered w-full" required>
+                                {{ range .Clients }}
+                                <option value="{{ .ID }}" {{ if eq .ID $.Invoice.ClientID }}selected{{ end }}>{{ .Name }}</option>
+                                {{ end }}
+                            </select>
+                        </div>
+                        <div class="form-control">
+                            <label class="label"><span class="label-text">{{ t "issue_date" }}</span></label>
+                            <input type="date" name="issue_date" value="{{ .Invoice.IssueDate.Format "2006-01-02" }}" class="input input-bordered w-full" required />
+                        </div>
+                        <div class="form-control">
+                            <label class="label"><span class="label-text">{{ t "due_date" }}</span></label>
+                            <input type="date" name="due_date" value="{{ .Invoice.DueDate.Format "2006-01-02" }}" class="input input-bordered w-full" required />
+                        </div>
+                        <div class="card-actions justify-end mt-4">
+                            <button type="submit" class="btn btn-secondary btn-sm w-full">{{ t "update_info" }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}

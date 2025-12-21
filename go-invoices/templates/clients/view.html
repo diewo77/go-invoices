@@ -1,0 +1,77 @@
+{{ define "title" }}{{ .Client.Name }}{{ end }}
+
+{{ define "content" }}
+<div class="max-w-4xl mx-auto">
+    <div class="mb-6 flex justify-between items-end">
+        <div>
+            <a href="/clients" class="btn btn-ghost btn-sm mb-2">← {{ t "back_to_list" }}</a>
+            <h1 class="text-2xl font-bold">{{ .Client.Name }}</h1>
+        </div>
+        <div class="flex gap-2">
+            <a href="/clients/{{ .Client.ID }}/edit" class="btn btn-primary btn-sm">{{ t "edit" }}</a>
+            <form action="/clients/{{ .Client.ID }}/delete" method="POST" onsubmit="return confirm('{{ t "confirm_delete" }}')">
+                <button type="submit" class="btn btn-error btn-sm">{{ t "delete" }}</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="md:col-span-2 space-y-6">
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title">{{ t "client_details" }}</h2>
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <div class="text-sm opacity-50">{{ t "company" }}</div>
+                            <div class="font-medium">{{ if .Client.Company }}{{ .Client.Company }}{{ else }}---{{ end }}</div>
+                        </div>
+                        <div>
+                            <div class="text-sm opacity-50">{{ t "email" }}</div>
+                            <div class="font-medium">{{ if .Client.Email }}{{ .Client.Email }}{{ else }}---{{ end }}</div>
+                        </div>
+                        <div>
+                            <div class="text-sm opacity-50">{{ t "phone" }}</div>
+                            <div class="font-medium">{{ if .Client.Phone }}{{ .Client.Phone }}{{ else }}---{{ end }}</div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <h3 class="font-bold mb-2">{{ t "address" }}</h3>
+                    <p class="whitespace-pre-line">{{ if .Client.Address }}{{ .Client.Address }}{{ end }}
+{{ .Client.PostalCode }} {{ .Client.City }}
+{{ .Client.Country }}</p>
+
+                    <div class="divider"></div>
+
+                    <h3 class="font-bold mb-2">{{ t "tax_info" }}</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <div class="text-sm opacity-50">{{ t "siret" }}</div>
+                            <div class="font-medium">{{ if .Client.SIRET }}{{ .Client.SIRET }}{{ else }}---{{ end }}</div>
+                        </div>
+                        <div>
+                            <div class="text-sm opacity-50">{{ t "vat_number" }}</div>
+                            <div class="font-medium">{{ if .Client.VATNumber }}{{ .Client.VATNumber }}{{ else }}---{{ end }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title">{{ t "stats" }}</h2>
+                    <div class="stats stats-vertical shadow">
+                        <div class="stat">
+                            <div class="stat-title">{{ t "total_invoices" }}</div>
+                            <div class="stat-value text-primary">{{ len .Client.Invoices }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}

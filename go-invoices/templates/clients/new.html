@@ -1,0 +1,152 @@
+{{ define "title" }}{{ t "new_client" }}{{ end }} {{ define "content" }}
+<div class="max-w-2xl mx-auto">
+  <div class="mb-6">
+    <a href="/clients" class="btn btn-ghost btn-sm mb-2"
+      >← {{ t "back_to_list" }}</a
+    >
+    <h1 class="text-2xl font-bold">{{ t "new_client" }}</h1>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <form action="/clients" method="POST">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "name" }} *</span></label
+            >
+            <input
+              type="text"
+              name="name"
+              value="{{ .Client.Name }}"
+              class="input input-bordered w-full {{ if .Errors.name }}input-error{{ end }}"
+              required
+            />
+            {{ if .Errors.name }}<label class="label"
+              ><span class="label-text-alt text-error"
+                >{{ .Errors.name }}</span
+              ></label
+            >{{ end }}
+          </div>
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "company" }}</span></label
+            >
+            <input
+              type="text"
+              name="company"
+              value="{{ .Client.Company }}"
+              class="input input-bordered w-full"
+            />
+          </div>
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "email" }}</span></label
+            >
+            <input
+              type="email"
+              name="email"
+              value="{{ .Client.Email }}"
+              class="input input-bordered w-full"
+            />
+          </div>
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "phone" }}</span></label
+            >
+            <input
+              type="text"
+              name="phone"
+              value="{{ .Client.Phone }}"
+              class="input input-bordered w-full"
+            />
+          </div>
+        </div>
+
+        <div class="divider">{{ t "address" }}</div>
+
+        <div class="form-control w-full">
+          <label class="label"
+            ><span class="label-text">{{ t "address" }}</span></label
+          >
+          <input
+            type="text"
+            name="address"
+            value="{{ .Client.Address }}"
+            class="input input-bordered w-full"
+          />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "postal_code" }}</span></label
+            >
+            <input
+              type="text"
+              name="postal_code"
+              value="{{ .Client.PostalCode }}"
+              class="input input-bordered w-full"
+            />
+          </div>
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "city" }}</span></label
+            >
+            <input
+              type="text"
+              name="city"
+              value="{{ .Client.City }}"
+              class="input input-bordered w-full"
+            />
+          </div>
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "country" }}</span></label
+            >
+            <input
+              type="text"
+              name="country"
+              value="{{ .Client.Country }}"
+              class="input input-bordered w-full"
+            />
+          </div>
+        </div>
+
+        <div class="divider">{{ t "tax_info" }}</div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "siret" }}</span></label
+            >
+            <input
+              type="text"
+              name="siret"
+              value="{{ .Client.SIRET }}"
+              class="input input-bordered w-full"
+            />
+          </div>
+          <div class="form-control w-full">
+            <label class="label"
+              ><span class="label-text">{{ t "vat_number" }}</span></label
+            >
+            <input
+              type="text"
+              name="vat_number"
+              value="{{ .Client.VATNumber }}"
+              class="input input-bordered w-full"
+            />
+          </div>
+        </div>
+
+        <div class="card-actions justify-end mt-8">
+          <button type="submit" class="btn btn-primary">
+            {{ t "create_client" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{{ end }}
