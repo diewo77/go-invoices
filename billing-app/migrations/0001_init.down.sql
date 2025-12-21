@@ -1,4 +1,0 @@
-DROP TABLE IF EXISTS company_settings;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS roles;
-DROP TABLE IF EXISTS addresses;
